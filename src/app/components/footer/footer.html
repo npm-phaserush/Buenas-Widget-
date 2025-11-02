@@ -1,0 +1,59 @@
+<!-- ADD THIS: Jackpot + Winner row -->
+<div class="flex items-center justify-center w-full gap-2 md:mr-4 sm:gap-3 mb-12 relative sm:mx-6 md:mx-auto">
+  <!-- 💰 Jackpot Box -->
+  <div
+    class="bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f] rounded-lg sm:rounded-xl px-1 sm:px-4 py-1 sm:py-3 text-center 
+           w-[45%] sm:w-[30%] md:w-[320px] h-[55px] sm:h-[65px] md:h-[75px]
+           shadow-[0_0_15px_rgba(255,204,51,0.2),_0_0_25px_rgba(0,0,0,0.8)] 
+           border border-white/10 flex-shrink-0">
+    <p class="text-[#ffcc33] font-bold text-[10px] sm:text-sm md:text-base font-[Geologica] tracking-tight mt-0">
+      TOTAL SPIN JACKPOT
+    </p>
+    <p
+      class="text-white text-sm sm:text-2xl md:text-4xl font-bold font-[Geologica]
+             drop-shadow-[0_0_10px_rgba(255,204,51,0.3)] mt-0">
+      ₱98,765,432
+    </p>
+  </div>
+
+  <!-- 🏆 Winner Box -->
+  <div
+    class="flex items-center justify-center gap-1 sm:gap-2 bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f]
+           rounded-lg sm:rounded-xl px-1 sm:px-4 py-1 sm:py-3 shadow-[0_0_15px_rgba(0,0,0,0.7)] border border-white/5
+           h-[55px] sm:h-[75px] md:h-[85px] overflow-hidden relative 
+           w-[45%] sm:w-[30%] md:w-[320px] flex-shrink-0">
+    <div class="flex flex-col items-center animate-[scrollList_20s_ease-in-out_infinite]">
+
+      <!-- Previous Winner -->
+      <div id="two"
+        class="flex items-center gap-1 sm:gap-2 opacity-50 absolute bottom-[50px] transition-opacity duration-500">
+        <img src="assets/images/svg9.png" alt="" class="h-[10px] sm:h-[18px] md:h-[22px]">
+        <div>
+          <p class="text-white text-[8px] sm:text-xs md:text-base font-semibold font-[Geologica] m-0">GamerX1234****</p>
+          <p class="text-[#ffcc33] text-[8px] sm:text-xs md:text-base font-semibold font-[Geologica] m-0">won ₱276,000.00</p>
+        </div>
+      </div>
+
+      <!-- Current Winner -->
+      <div id="one" class="flex items-center gap-1 sm:gap-2">
+        <img src="assets/images/svg9.png" alt="" class="h-[10px] sm:h-[18px] md:h-[22px]">
+        <div>
+          <p class="text-white text-[8px] sm:text-xs md:text-base font-semibold font-[Geologica] m-0">GamerX1234****</p>
+          <p class="text-[#ffcc33] text-[8px] sm:text-xs md:text-base font-semibold font-[Geologica] m-0">won ₱276,000.00</p>
+        </div>
+      </div>
+
+      <!-- Next Winner -->
+      <div id="tree"
+        class="flex items-center gap-1 sm:gap-2 opacity-50 absolute top-[50px] transition-opacity duration-500">
+        <img src="assets/images/svg9.png" alt="" class="h-[10px] sm:h-[18px] md:h-[22px]">
+        <div>
+          <p class="text-white text-[8px] sm:text-xs md:text-base font-semibold font-[Geologica] m-0">GamerX1234****</p>
+          <p class="text-[#ffcc33] text-[8px] sm:text-xs md:text-base font-semibold font-[Geologica] m-0">won ₱276,000.00</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- END ADD -->

@@ -1,0 +1,30 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+<div
+  class="relative w-[130px] sm:w-[150px] md:w-[170px] h-[90px] sm:h-[100px]
+         bg-[rgba(65,65,65,0.685)] rounded-[12px] border-2 border-transparent 
+         overflow-hidden m-[6px] sm:m-[10px] 
+         transition-all duration-200 ease-in-out 
+         shadow-none hover:shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+>
+  <!-- ==== TEXT ==== -->
+  <div
+    class="absolute top-[30px] left-0 rotate-[-45deg] origin-top-left w-[100px] text-left"
+  >
+    <h3 class="font-[Poppins] font-bold text-[13px] sm:text-[14px] text-[rgb(160,160,160)] transition-all duration-200 ease-in-out">
+      {{ title }}
+    </h3>
+    <p class="font-[Poppins] font-bold text-[14px] sm:text-[15px] mt-[1px] text-[rgba(134,134,134,0.6)] transition-all duration-200 ease-in-out">
+      {{ subtitle }}
+    </p>
+  </div>
+
+  <!-- ==== IMAGE ==== -->
+  <div class="absolute bottom-[-20px] right-[-15px]">
+    <img
+      [src]="image"
+      alt="Prize Image"
+      class="w-[70px] h-[70px] sm:w-[80px] sm:h-[80px] rotate-[-45deg] opacity-95 transition-all duration-200 ease-out"
+    />
+  </div>
+</div>
