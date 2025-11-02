@@ -1,9 +1,9 @@
 <div class="flex flex-col items-center justify-center min-h-screen w-full bg-black relative overflow-hidden disco-bg">
 
-    <!-- Background Overlay -->
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,165,0,0.2)_0%,rgba(0,0,0,1)_80%)]"></div>
+  <!-- Background Overlay -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,165,0,0.2)_0%,rgba(0,0,0,1)_80%)]"></div>
 
-<!-- 🎯 Row container for prizes + level -->
+  <!-- 🎯 Row container for prizes + level -->
   <div
     class="absolute top-2 left-8 sm:top-4 sm:left-4 md:top-6 md:left-8 lg:top-8 lg:left-12 xl:top-10 xl:left-16 z-20">
     <div
@@ -11,81 +11,39 @@
            scale-[0.45] xs:scale-[0.55] sm:scale-[0.65] md:scale-[0.8] lg:scale-100 
            origin-top-left whitespace-nowrap">
       <div class="flex flex-row items-center gap-2 sm:gap-3 md:gap-4">
-        <app-prizes-card
-          title="Major "
-          subtitle="Prize"
-          image="assets/images/small_roulette1.png"></app-prizes-card>
-
-        <app-prizes-card
-          title="Minor "
-          subtitle="Prize"
-          image="assets/images/small_roulette2.png"></app-prizes-card>
-
-        <app-prizes-card
-          title="Grand"
-          subtitle="Prize"
-          image="assets/images/small_roulette3.png"></app-prizes-card>
+        <app-prizes-card title="Major " subtitle="Prize" image="assets/images/small_roulette1.png"></app-prizes-card>
+        <app-prizes-card title="Minor " subtitle="Prize" image="assets/images/small_roulette2.png"></app-prizes-card>
+        <app-prizes-card title="Grand" subtitle="Prize" image="assets/images/small_roulette3.png"></app-prizes-card>
       </div>
-
       <app-level title="Level 12" subtitle="Current Level"></app-level>
     </div>
   </div>
 
-
- <div 
-  class="relative flex justify-center items-center wheel-container 
+  <!-- 🎯 Wheel container -->
+  <div 
+    class="relative flex justify-center items-center wheel-container 
          scale-[0.65] xs:scale-[0.75] sm:scale-[0.85] md:scale-[0.9] lg:scale-[0.95] 
-        mb-60 xs:mt-6 sm:mt-8 md:mt-10 lg:mt-12 
+         mb-60 xs:mt-6 sm:mt-8 md:mt-10 lg:mt-12 
          mb-12 xs:mb-16 sm:mb-20 md:mb-24 lg:mb-28"
-  style="--wheel-size: 300px;"
->
+    style="--wheel-size: 300px;"
+  >
 
-    
-    <!-- Main Wheel -->
-    <div #wheel class="relative rounded-full border-[5px] border-yellow-400 overflow-hidden origin-center wheel"
-         style="width: var(--wheel-size); height: var(--wheel-size);">
-      
-      <!-- Wheel Slices -->
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice1">
-        <div class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">YAMAHA NMAX</span>
-        </div>
+    <!-- 🎯 Main Wheel -->
+    <div #wheel
+      class="relative rounded-full border-[5px] border-yellow-400 overflow-hidden origin-center wheel"
+      style="width: var(--wheel-size); height: var(--wheel-size);"
+    >
+      <!-- Colored slices -->
+      <div *ngFor="let slice of slices; let i = index"
+        class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice">
       </div>
-      
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice2">
-        <div class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">HONDA NMAX</span>
-        </div>
-      </div>
-      
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice3">
-        <div class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">LAMBO NMAX</span>
-        </div>
-      </div>
-      
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice4">
-        <div class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">BMW NMAX</span>
-        </div>
-      </div>
-      
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice5">
-        <div class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">FERRARI NMAX</span>
-        </div>
-      </div>
-      
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice6">
-        <div class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">YAMAHA NMAX</span>
-        </div>
+
+      <!-- Floating labels -->
+      <div *ngFor="let slice of slices; let i = index"
+        class="absolute flex flex-col items-center justify-center text-center floating-label"
+        [style.transform]="getLabelPosition(i)">
+        <img [src]="slice.image" alt="" class="label-image" />
+        <span class="label-text">{{ slice.title }}</span>
       </div>
     </div>
 
@@ -108,36 +66,25 @@
 
     <!-- Rim Bulbs -->
     <div class="absolute top-1/2 left-1/2 w-[450px] h-[440px] xs:w-[350px] xs:h-[350px] sm:w-[375px] sm:h-[385px] md:w-[390px] md:h-[395px] transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30 rim-bulbs">
-      <!-- Top bulb -->
-      <div class="absolute w-4 h-4  sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
+      <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 9%; left: 48.5%;"></div>
-      <!-- Top-right bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 15%; left: 75%;"></div>
-      <!-- Right bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 40%; left: 87%;"></div>
-      <!-- Bottom-right bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 62%; left: 75%;"></div>
-      <!-- Bottom bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 69%; left: 48.5%;"></div>
-      <!-- Bottom-left bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 55%; left: 23%;"></div>
-      <!-- Left bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: 25.5%; left: 9%;"></div>
-      <!-- Top-left bulb -->
       <div class="absolute w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 rounded-full bg-gradient-radial from-yellow-100 via-yellow-400 to-yellow-600 shadow-bulb animate-bulbGlow bulb" 
            style="top: -10%; left: 20%;"></div>
     </div>
 
-    <!-- Ribbon -->
-    <div class="absolute top-40 xs:top-25 sm:top-30 md:top-28 lg:top-24 left-1/2 transform -translate-x-1/2 z-50 ribbon">
-      <img src="assets/images/ribbon.png" alt="" class="w-[390px] h-[280px] xs:w-[300px] xs:h-[220px] sm:w-[320px] sm:h-[240px] md:w-[340px] md:h-[260px] lg:w-[350px] lg:h-[280px] ribbon-img">
-    </div>
+   
 
     <!-- Arrow Button -->
     <div class="absolute left-1/2 transform -translate-x-1/2 z-5 arrow">
