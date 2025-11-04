@@ -1,9 +1,116 @@
-<div class="flex items-center justify-center h-screen max-w-[500px] mx-auto min-h-[380px]">
-<div class="flex flex-row items-center justify-center w-full absolute  top-[70px] sm:top-[110px] md:top-[140px] lg:top-[100px]  ">
+<div
+  class="flex flex-row items-center justify-center w-full absolute  top-[70px] sm:top-[110px] md:top-[110px] lg:top-[150px]  xl:top-[100px] ">
   <app-prizes-card title="Major" subtitle="Prize" image="assets/images/small_roulette1.png"></app-prizes-card>
   <app-prizes-card title="Minor" subtitle="Prize" image="assets/images/small_roulette2.png"></app-prizes-card>
   <app-prizes-card title="Grand" subtitle="Prize" image="assets/images/small_roulette3.png"></app-prizes-card>
   <app-level title="Level 12" subtitle="Current Level"></app-level>
 </div>
-   
+
+<div
+  class=" flex flex-row items-center justify-center w-full absolute  top-[150px]  sm:top-[160px] md:top-[290px]  lg:top-[400px] xl:top-[210px] ">
+
+  <img src="assets/images/rim.png" alt=""
+    class="w-[330px] h-[330px] sm:w-[550px] sm:h-[550px] md:h-[590px] md:w-[590px]   lg:w-[650px] lg:h-[650px] xl:w-[450px] xl:h-[450px] block rim-img">
+
+
+  <div class="absolute inset-0 flex justify-center items-center wheel-container m-0">
+    <div #wheel class="relative rounded-full border-[2px] border-yellow-400 overflow-hidden origin-center wheel
+              w-[226px] xs:w-[320px] sm:w-[380px] md:w-[400px] xl:w-[300px] lg:w-[440px]
+              h-[226px] xs:h-[320px] sm:h-[380px] md:h-[400px] xl:h-[300px] lg:h-[440px]">
+
+      <!-- Wheel Slices -->
+      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice1">
+        <div
+          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
+          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
+          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">YAMAHA NMAX</span>
+        </div>
+      </div>
+
+      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice2">
+        <div
+          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
+          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
+          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">HONDA NMAX</span>
+        </div>
+      </div>
+
+      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice3">
+        <div
+          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
+          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
+          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">LAMBO NMAX</span>
+        </div>
+      </div>
+
+      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice4">
+        <div
+          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
+          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
+          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">BMW NMAX</span>
+        </div>
+      </div>
+
+      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice5">
+        <div
+          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
+          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
+          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">FERRARI NMAX</span>
+        </div>
+      </div>
+
+      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice6">
+        <div
+          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
+          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
+          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">YAMAHA NMAX</span>
+        </div>
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+
+    <!-- Ribbon -->
+    <div
+      class="absolute top-38 xs:top-25 sm:top-30 md:top-65 lg:top-24 left-1/2 transform -translate-x-1/2 z-50 ribbon">
+      <img src="assets/images/ribbon.png" alt=""
+        class="w-[300px] h-[280px] xs:w-[300px] xs:h-[220px] sm:w-[320px] sm:h-[240px] md:w-[540px] md:h-[560px] lg:w-[350px] lg:h-[280px] ribbon-img">
+    </div>
+
+    <!-- Arrow Button -->
+    <div class="absolute left-1/2 transform -translate-x-1/2 z-5 arrow">
+      <img src="assets/images/arrw-btn.png" alt="" class="h-15 xs:h-14 sm:h-16 md:h-18 lg:h-19">
+    </div>
+  </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<!-- Spin Button -->
+<div
+  class=" relative flex flex-row items-center justify-center w-full absolute  top-[500px] sm:top-[110px] md:top-[930px] lg:top-[150px]  xl:top-[100px] ">
+  <button
+    class="absolute flex-col items-center justify-center 
+                   w-35 xs:w-36 sm:w-40 md:w-70 lg:w-52 
+                   h-13 xs:h-13 sm:h-14 md:h-25 lg:h-16 
+                   bg-linear-to-r from-red-600 to-yellow-600 border-none rounded-lg text-white font-semibold shadow-lg cursor-pointer z-60 
+                   disabled:bg-linear-to-r disabled:from-gray-600 disabled:to-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed disabled:opacity-80 spin-btn"
+    [disabled]="spinCount <= 0 || isSpinning" (click)="spinWheel()">
+    <div class="text-[10px] xs:text-xs sm:text-xs md:text-xl tracking-wide">NO. OF FREE SPIN</div>
+    <div class="text-sm xs:text-base sm:text-base md:text-4xl font-bold ">{{ spinCount }} SPIN</div>
+  </button>
 </div>
