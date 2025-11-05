@@ -7,7 +7,7 @@
 </div>
 
 <div
-  class=" flex flex-row items-center justify-center w-full absolute  top-[150px]  sm:top-[160px] md:top-[290px]  lg:top-[400px] xl:top-[210px] ">
+  class=" flex flex-row items-center justify-center w-full absolute  top-[150px]  sm:top-[160px] md:top-[180px]  lg:top-[400px] xl:top-[210px] ">
 
   <img src="assets/images/rim.png" alt=""
     class="w-[330px] h-[330px] sm:w-[550px] sm:h-[550px] md:h-[590px] md:w-[590px]   lg:w-[650px] lg:h-[650px] xl:w-[450px] xl:h-[450px] block rim-img">
@@ -164,7 +164,18 @@
 
 
 
-
+ <!-- Winner Banner -->
+    <div #winnerBanner class="absolute top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center 
+                           gap-1.5 xs:gap-2 sm:gap-2.5 
+                           bg-black bg-opacity-60 
+                           px-2 xs:px-3 sm:px-4 md:px-6 
+                           py-2 xs:py-2.5 sm:py-3 md:py-4 
+                           rounded-lg sm:rounded-xl shadow-winner pointer-events-none opacity-0 text-white font-bold 
+                           text-sm xs:text-base sm:text-lg md:text-xl lg:text-3xl winner-banner max-w-[90vw]">
+        <img *ngIf="winnerImage" [src]="winnerImage" alt="Prize"
+            class="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain rounded-lg shadow-white flex-shrink-0" />
+        <span class="text-center">{{ winnerText }}</span>
+    </div>
 
 
 </div>
@@ -174,7 +185,7 @@
 
 <!-- Spin Button -->
 <div
-  class=" relative flex flex-row items-center justify-center w-full absolute  top-[500px] sm:top-[110px] md:top-[930px] lg:top-[150px]  xl:top-[100px] ">
+  class="  flex flex-row items-center justify-center w-full absolute  top-[525px] sm:top-[110px] md:top-[930px] lg:top-[150px]  xl:top-[100px] ">
   <button
     class="absolute flex-col items-center justify-center 
                    w-35 xs:w-36 sm:w-40 md:w-70 lg:w-52 
