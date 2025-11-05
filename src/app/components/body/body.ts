@@ -83,6 +83,7 @@ export class Body implements AfterViewInit {
       }
     };
     frame();
+    
   }
 
   showWinningAnimation(prize: string, imgSrc: string) {
