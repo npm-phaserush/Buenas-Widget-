@@ -4,4 +4,6 @@
 html, body{
     margin: 0;
     padding: 0;}
+/* Ensure Geologica utility works even if Tailwind fails to emit it */
+.font-geologica { font-family: 'Geologica', sans-serif; }
     

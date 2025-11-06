@@ -18,54 +18,23 @@
               w-[226px] xs:w-[320px] sm:w-[380px] md:w-[400px] xl:w-[300px] lg:w-[440px]
               h-[226px] xs:h-[320px] sm:h-[380px] md:h-[400px] xl:h-[300px] lg:h-[440px]">
 
-      <!-- Wheel Slices -->
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice1">
+      <!-- Wheel Slices (dynamic backgrounds only) -->
+      @for (slice of slices; track $index; let i = $index) {
         <div
-          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">YAMAHA NMAX</span>
+          class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice"
+          [style.transform]="getSliceTransform(i)">
         </div>
-      </div>
+      }
 
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice2">
+      <!-- Floating labels (dynamic content centered inside slices) -->
+      @for (slice of slices; track $index; let i = $index) {
         <div
-          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">HONDA NMAX</span>
+          class="absolute flex flex-col items-center justify-center text-center floating-label"
+          [style.transform]="getLabelPosition(i)">
+          <img [src]="slice.image" alt="" class="label-image" />
+          <span class="label-text" [innerHTML]="slice.title"></span>
         </div>
-      </div>
-
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice3">
-        <div
-          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">LAMBO NMAX</span>
-        </div>
-      </div>
-
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice4">
-        <div
-          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">BMW NMAX</span>
-        </div>
-      </div>
-
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice5">
-        <div
-          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">FERRARI NMAX</span>
-        </div>
-      </div>
-
-      <div class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice slice6">
-        <div
-          class="absolute w-full h-full top-0 left-0 flex flex-col items-center justify-center text-center p-2.5 box-border slice-content">
-          <img src="assets/images/nmax.png" alt="" class="max-w-[60%] h-auto">
-          <span class="text-xs sm:text-sm text-white font-bold drop-shadow-lg">YAMAHA NMAX</span>
-        </div>
-      </div>
+      }
 
 
 
@@ -168,16 +137,18 @@
 
 
   <!-- Winner Banner -->
-  <div #winnerBanner class="absolute top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center 
+  <div #winnerBanner class="absolute top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center
                            gap-1.5 xs:gap-2 sm:gap-2.5 
                            bg-black bg-opacity-60 
                            px-2 xs:px-3 sm:px-4 md:px-6 
                            py-2 xs:py-2.5 sm:py-3 md:py-4 
                            rounded-lg sm:rounded-xl shadow-winner pointer-events-none opacity-0 text-white font-bold 
                            text-sm xs:text-base sm:text-lg md:text-xl lg:text-3xl winner-banner max-w-[90vw]  z-80">
-    <img *ngIf="winnerImage" [src]="winnerImage" alt="Prize"
-      class="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain rounded-lg shadow-white flex-shrink-0" />
-    <span class="text-center">{{ winnerText }}</span>
+    @if (winnerImage) {
+      <img [src]="winnerImage" alt="Prize"
+        class="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain rounded-lg shadow-white flex-shrink-100" />
+    }
+    <span #winnerTextRef class="text-center whitespace-nowrap">{{ winnerText }}</span>
   </div>
 
 
@@ -196,7 +167,7 @@
                    bg-linear-to-r from-red-600 to-yellow-600 border-none rounded-lg text-white font-semibold shadow-lg cursor-pointer z-60 
                    disabled:bg-linear-to-r disabled:from-gray-600 disabled:to-gray-500 disabled:text-gray-300 disabled:cursor-not-allowed disabled:opacity-80 spin-btn"
     [disabled]="spinCount <= 0 || isSpinning" (click)="spinWheel()">
-    <div class="text-[10px] xs:text-xs sm:text-xs md:text-xl 2xl:text-[12px] tracking-wide">NO. OF FREE SPIN</div>
-    <div class="text-sm xs:text-base sm:text-base md:text-4xl   2xl:text-[25px] font-bold ">{{ spinCount }} SPIN</div>
+    <div class="text-[10px] xs:text-xs sm:text-xs md:text-xl 2xl:text-[12px] tracking-wide font-geologica ">NO. OF FREE SPIN</div>
+    <div class="text-sm xs:text-base sm:text-base md:text-4xl font-geologica 2xl:text-[25px] font-bold ">{{ spinCount }} SPIN</div>
   </button>
 </div>

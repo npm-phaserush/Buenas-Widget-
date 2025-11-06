@@ -24,10 +24,11 @@ export class PrizesCard implements AfterViewInit {
     };
 
     const titleText = this.title.toLowerCase();
+    // Swap hover effects: minor -> red, major -> yellow
     const glowColor = titleText.includes('minor')
-      ? '#FFD700'
+      ? '#FF0000' // red for MINOR
       : titleText.includes('major')
-      ? '#FF0000'
+      ? '#FFD700' // yellow for MAJOR
       : '#009DFF';
 
     const animations = {
@@ -35,7 +36,7 @@ export class PrizesCard implements AfterViewInit {
         image: {
           rotation: 360,
           scale: 1.15,
-          filter: `drop-shadow(0 0 40px ${glowColor})`,
+          filter: `grayscale(0%) drop-shadow(0 0 40px ${glowColor})`,
           duration: 0.8,
           ease: 'elastic.out(1, 0.5)',
         },
@@ -44,8 +45,10 @@ export class PrizesCard implements AfterViewInit {
           boxShadow: `0 0 25px 6px ${glowColor}`,
         },
         title: {
-          scale: 1.1,
-          textShadow: `0 0 25px ${glowColor}, 0 0 40px ${glowColor}`,
+          // On hover: no effects, just white text
+          scale: 1,
+          color: '#ffffff',
+          textShadow: 'none',
         },
         subtitle: {
           color: glowColor,
@@ -57,7 +60,7 @@ export class PrizesCard implements AfterViewInit {
         image: {
           rotation: -50, // ✅ Always go back to -50 degrees
           scale: 1,
-          filter: 'drop-shadow(0 0 0 transparent)',
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           duration: 0.4,
           ease: 'power2.inOut',
         },
@@ -67,10 +70,11 @@ export class PrizesCard implements AfterViewInit {
         },
         title: {
           scale: 1,
+          color: 'rgb(160,160,160)',
           textShadow: 'none',
         },
         subtitle: {
-          color: 'rgba(0,0,0,0.6)',
+          color: 'rgba(134,134,134,0.6)',
           scale: 1,
           textShadow: 'none',
         },
