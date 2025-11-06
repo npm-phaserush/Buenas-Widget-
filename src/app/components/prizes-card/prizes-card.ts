@@ -6,7 +6,7 @@ import { gsap } from 'gsap';
   standalone: true,
   imports: [],
   templateUrl: './prizes-card.html',
-  styleUrl: './prizes-card.css'
+  styleUrl: './prizes-card.css',
 })
 export class PrizesCard implements AfterViewInit {
   @Input() title: string = '';
@@ -20,62 +20,72 @@ export class PrizesCard implements AfterViewInit {
       card: this.el.nativeElement.querySelector('div'),
       image: this.el.nativeElement.querySelector('img'),
       title: this.el.nativeElement.querySelector('h3'),
-      subtitle: this.el.nativeElement.querySelector('p')
+      subtitle: this.el.nativeElement.querySelector('p'),
     };
 
     const titleText = this.title.toLowerCase();
-    const glowColor =
-      titleText.includes('minor') ? '#FFD700' :
-      titleText.includes('major') ? '#FF0000' :
-      '#009DFF';
+    // Swap hover effects: minor -> red, major -> yellow
+    const glowColor = titleText.includes('minor')
+      ? '#FF0000' // red for MINOR
+      : titleText.includes('major')
+      ? '#FFD700' // yellow for MAJOR
+      : '#009DFF';
 
     const animations = {
       enter: {
         image: {
           rotation: 360,
           scale: 1.15,
-          filter: `drop-shadow(0 0 40px ${glowColor})`,
+          filter: `grayscale(0%) drop-shadow(0 0 40px ${glowColor})`,
           duration: 0.8,
-          ease: 'elastic.out(1, 0.5)'
+          ease: 'elastic.out(1, 0.5)',
         },
         card: {
           borderColor: glowColor,
-          boxShadow: `0 0 25px 6px ${glowColor}`
+          boxShadow: `0 0 25px 6px ${glowColor}`,
         },
         title: {
-          scale: 1.1,
-          textShadow: `0 0 25px ${glowColor}, 0 0 40px ${glowColor}`
+          // On hover: no effects, just white text
+          scale: 1,
+          color: '#ffffff',
+          textShadow: 'none',
         },
         subtitle: {
           color: glowColor,
           scale: 1.08,
-          textShadow: `0 0 20px ${glowColor}, 0 0 35px ${glowColor}`
-        }
+          textShadow: `0 0 20px ${glowColor}, 0 0 35px ${glowColor}`,
+        },
       },
       leave: {
         image: {
-          rotation: -50,
+          rotation: -50, // ✅ Always go back to -50 degrees
           scale: 1,
-          filter: 'drop-shadow(0 0 0 transparent)'
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
+          duration: 0.4,
+          ease: 'power2.inOut',
         },
         card: {
           borderColor: 'transparent',
-          boxShadow: 'none'
+          boxShadow: 'none',
         },
         title: {
           scale: 1,
-          textShadow: 'none'
+          color: 'rgb(160,160,160)',
+          textShadow: 'none',
         },
         subtitle: {
-          color: 'rgba(0,0,0,0.6)',
+          color: 'rgba(134,134,134,0.6)',
           scale: 1,
-          textShadow: 'none'
-        }
-      }
+          textShadow: 'none',
+        },
+      },
     };
 
-    const animate = (el: HTMLElement, props: Record<string, any>) =>
-      gsap.to(el, { duration: 0.25, ease: 'power2.out', ...props });
+    // ✅ Always kill old tweens before starting a new one
+    const animate = (el: HTMLElement, props: Record<string, any>) => {
+      gsap.killTweensOf(el); // stop ongoing animations instantly
+      gsap.to(el, { overwrite: 'auto', ...props });
+    };
 
     elements.card.addEventListener('mouseenter', () => {
       animate(elements.image, animations.enter.image);
