@@ -38,13 +38,4 @@ export class Level {
       default: return '0 0 15px rgba(255,179,0,0.4)';
     }
   }
-
-  getVipColor(): string {
-    switch (this.variant) {
-      case 'major': return '#ff4d4d';
-      case 'grand': return '#2da8ff';
-      case 'minor':
-      default: return '#ffb800';
-    }
-  }
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 import confetti from 'canvas-confetti';
@@ -23,6 +23,7 @@ export class Body implements AfterViewInit {
   isSpinning = false;
   rotation = 0;
   currentVariant: 'minor' | 'major' | 'grand' = 'minor';
+  @Output() variantChange = new EventEmitter<'minor' | 'major' | 'grand'>();
 
   slices = [
     { title: '500<br>CHIPS', image: 'assets/images/chips-red.png' },
@@ -38,6 +39,8 @@ export class Body implements AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
+    // Emit initial variant so parent listeners (e.g., Footer via Spinwheel) can sync
+    Promise.resolve().then(() => this.variantChange.emit(this.currentVariant));
   }
 
   getSliceTransform(index: number): string {
@@ -47,7 +50,10 @@ export class Body implements AfterViewInit {
   }
 
   onVariantPicked(variant: 'minor' | 'major' | 'grand') {
-    if (variant) this.currentVariant = variant;
+    if (variant) {
+      this.currentVariant = variant;
+      this.variantChange.emit(this.currentVariant);
+    }
   }
 
   getSliceBackground(): string {

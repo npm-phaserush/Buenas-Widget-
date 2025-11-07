@@ -2,6 +2,6 @@
 
 
     <app-header></app-header>
-    <app-body></app-body>
-    <app-footer></app-footer>
+    <app-body (variantChange)="activeVariant = $event"></app-body>
+    <app-footer [variant]="activeVariant"></app-footer>
 

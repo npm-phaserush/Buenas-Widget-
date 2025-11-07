@@ -17,7 +17,7 @@ export class PrizesCard implements AfterViewInit {
   @Input() titleAlt: string = '';
   @Input() subtitleAlt: string = '';
   @Input() variant: 'minor' | 'major' | 'grand' | '' = '';
-  @Input() active: boolean = false; // programmatic active hover state
+  @Input() active: boolean = false; 
   @Output() picked = new EventEmitter<'minor' | 'major' | 'grand'>();
 
   constructor(private el: ElementRef) {}
@@ -31,7 +31,6 @@ export class PrizesCard implements AfterViewInit {
     const parsedTitle = this.title.toLowerCase();
     const effectiveVariant: 'minor' | 'major' | 'grand' | '' = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
 
-    // Variant-specific glow colors (minor yellow, major red, grand blue)
     const glowColor =
       effectiveVariant === 'minor'
         ? '#FFD700' // yellow
@@ -115,9 +114,7 @@ export class PrizesCard implements AfterViewInit {
 
     // Default active on load
     if (this.active) {
-      // Emit variant to parent to sync wheel appearance
       if (effectiveVariant) this.picked.emit(effectiveVariant);
-      // Run hover animations once
       setTimeout(() => {
         animate(elements.image, animations.enter.image);
         animate(elements.card, animations.enter.card);
