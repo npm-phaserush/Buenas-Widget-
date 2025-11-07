@@ -77,12 +77,12 @@ export class Body implements AfterViewInit {
   getBulbBaseColor(): string {
     switch (this.currentVariant) {
       case 'major':
-        return '#ff2d2d'; // base red glow
+        return '#ff2d2d'; //  red glow
       case 'grand':
-        return '#2d9cff'; // base blue glow
+        return '#2d9cff'; //  blue glow
       case 'minor':
       default:
-        return '#ffb400'; // base yellow/orange glow
+        return '#ffb400'; // yellow glow
     }
   }
 
@@ -110,20 +110,20 @@ export class Body implements AfterViewInit {
     }
   }
 
-  // Variant-based border color for rim bulbs
+  
   getBulbBorderColor(): string {
     switch (this.currentVariant) {
       case 'major':
-        return '#ff2d2d';
+        return '#ff2d2d'; // red
       case 'grand':
-        return '#2d9cff';
+        return '#2d9cff'; // blue
       case 'minor':
       default:
-        return '#ffd700';
+        return '#ffd700'; // yellow
     }
   }
 
-  // Rim glow helpers
+  // Rim glow 
   getRimGlow0(): string {
     switch (this.currentVariant) {
       case 'major': return 'rgba(255,70,70,0.6)';
