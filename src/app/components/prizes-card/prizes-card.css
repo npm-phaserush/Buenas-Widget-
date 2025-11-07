@@ -1,6 +1,4 @@
-/* Default: make the prize image black-and-white */
-.relative img {
-	filter: grayscale(100%);
-}
+/* Default state: grayscale images */
+.relative img { filter: grayscale(100%); }
 
-/* Hover/active color is handled by GSAP animations to keep state consistent */
+/* Remove previous variant-specific hover color logic; GSAP now only applies neutral white glow */

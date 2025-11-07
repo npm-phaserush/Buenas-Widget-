@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { gsap } from 'gsap';
 
 @Component({
@@ -12,13 +12,13 @@ export class PrizesCard implements AfterViewInit {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() image: string = '';
-  // New direct image inputs (optional fallbacks to legacy title/subtitle)
   @Input() titleImage: string = '';
   @Input() subtitleImage: string = '';
   @Input() titleAlt: string = '';
   @Input() subtitleAlt: string = '';
-  // Variant drives glow color directly (minor | major | grand)
   @Input() variant: 'minor' | 'major' | 'grand' | '' = '';
+  @Input() active: boolean = false; 
+  @Output() picked = new EventEmitter<'minor' | 'major' | 'grand'>();
 
   constructor(private el: ElementRef) {}
 
@@ -26,21 +26,19 @@ export class PrizesCard implements AfterViewInit {
     const elements = {
       card: this.el.nativeElement.querySelector('div'),
       image: this.el.nativeElement.querySelector('.wheel-img'),
-      title: this.el.nativeElement.querySelector('h3'),
-      subtitle: this.el.nativeElement.querySelector('p'),
     };
 
-    // Determine glow color: prefer explicit variant; fallback to legacy title parsing.
     const parsedTitle = this.title.toLowerCase();
-    const effectiveVariant = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
+    const effectiveVariant: 'minor' | 'major' | 'grand' | '' = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
+
     const glowColor =
       effectiveVariant === 'minor'
-        ? '#FF0000'
+        ? '#FFD700' // yellow
         : effectiveVariant === 'major'
-        ? '#FFD700'
+        ? '#FF2D2D' // red
         : effectiveVariant === 'grand'
-        ? '#009DFF'
-        : '#FFD700'; // default fallback
+        ? '#009DFF' // blue
+        : '#FFD700';
 
     const animations = {
       enter: {
@@ -55,7 +53,6 @@ export class PrizesCard implements AfterViewInit {
           borderColor: glowColor,
           boxShadow: `0 0 25px 6px ${glowColor}`,
         },
-        // Title/subtitle image hover (apply same glow to both small images)
         titleImg: {
           filter: `grayscale(0%) drop-shadow(0 0 12px ${glowColor})`,
           scale: 1.05,
@@ -71,7 +68,7 @@ export class PrizesCard implements AfterViewInit {
       },
       leave: {
         image: {
-          rotation: -50, // ✅ Always go back to -50 degrees
+          rotation: -50, 
           scale: 1,
           filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           duration: 0.4,
@@ -92,9 +89,8 @@ export class PrizesCard implements AfterViewInit {
       },
     };
 
-    // ✅ Always kill old tweens before starting a new one
     const animate = (el: HTMLElement, props: Record<string, any>) => {
-      gsap.killTweensOf(el); // stop ongoing animations instantly
+      gsap.killTweensOf(el); 
       gsap.to(el, { overwrite: 'auto', ...props });
     };
 
@@ -106,6 +102,7 @@ export class PrizesCard implements AfterViewInit {
       animate(elements.card, animations.enter.card);
       if (titleImgEl) animate(titleImgEl, animations.enter.titleImg);
       if (subtitleImgEl) animate(subtitleImgEl, animations.enter.subtitleImg);
+      if (effectiveVariant) this.picked.emit(effectiveVariant);
     });
 
     elements.card.addEventListener('mouseleave', () => {
@@ -114,5 +111,16 @@ export class PrizesCard implements AfterViewInit {
       if (titleImgEl) animate(titleImgEl, animations.leave.titleImg);
       if (subtitleImgEl) animate(subtitleImgEl, animations.leave.subtitleImg);
     });
+
+    // Default active on load
+    if (this.active) {
+      if (effectiveVariant) this.picked.emit(effectiveVariant);
+      setTimeout(() => {
+        animate(elements.image, animations.enter.image);
+        animate(elements.card, animations.enter.card);
+        if (titleImgEl) animate(titleImgEl, animations.enter.titleImg);
+        if (subtitleImgEl) animate(subtitleImgEl, animations.enter.subtitleImg);
+      }, 0);
+    }
   }
 }
