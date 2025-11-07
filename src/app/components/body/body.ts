@@ -110,6 +110,19 @@ export class Body implements AfterViewInit {
     }
   }
 
+  // Variant-based border color for rim bulbs
+  getBulbBorderColor(): string {
+    switch (this.currentVariant) {
+      case 'major':
+        return '#ff2d2d';
+      case 'grand':
+        return '#2d9cff';
+      case 'minor':
+      default:
+        return '#ffd700';
+    }
+  }
+
   // Rim glow helpers
   getRimGlow0(): string {
     switch (this.currentVariant) {

@@ -22,38 +22,6 @@
   mask-size: cover;
 }
 
-/* Responsive background adjustments */
-@media (max-width: 768px) {
-  .disco-bg {
-    background-size: cover;
-    background-attachment: scroll;
-  }
-}
-
-/* Wheel container responsive adjustments */
-@media (max-width: 475px) {
-  .wheel-container {
-    --wheel-size: 180px;
-  }
-}
-
-@media (min-width: 476px) and (max-width: 640px) {
-  .wheel-container {
-    --wheel-size: 200px;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 768px) {
-  .wheel-container {
-    --wheel-size: 220px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .wheel-container {
-    --wheel-size: 240px;
-  }
-}
 
 /* Wheel slice shape  */
 .slice {
@@ -98,7 +66,7 @@
     opacity: 0.9; 
     transform: scale(0.95); 
     filter: brightness(1.2); 
-    box-shadow: 0 0 15px 5px var(--bulb-glow-0, rgba(255, 200, 0, 0.6));
+    box-shadow: 0 0 15px 5px var(--bulb-glow-0, rgba(111, 0, 255, 0.6));
   }
   100% { 
     opacity: 1; 
@@ -168,8 +136,9 @@
 }
 
 .rim-bulbs .bulb {
-  background: radial-gradient(circle, #fff 0%, #ffeb3b 30%, #ff9800 100%);
-  border: 2px solid #ffd700;
+  /* Background and border now driven by CSS variables set from the component */
+  background: var(--bulb-background, radial-gradient(circle, #fff 0%, #ffeb3b 30%, #ff9800 100%));
+  border: 2px solid var(--bulb-border, #ffd700);
   box-shadow: 
     0 0 20px var(--bulb-base, #ffd700),
     0 0 40px var(--bulb-base, #ffd700),
