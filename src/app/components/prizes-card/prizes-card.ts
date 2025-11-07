@@ -12,24 +12,35 @@ export class PrizesCard implements AfterViewInit {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() image: string = '';
+  // New direct image inputs (optional fallbacks to legacy title/subtitle)
+  @Input() titleImage: string = '';
+  @Input() subtitleImage: string = '';
+  @Input() titleAlt: string = '';
+  @Input() subtitleAlt: string = '';
+  // Variant drives glow color directly (minor | major | grand)
+  @Input() variant: 'minor' | 'major' | 'grand' | '' = '';
 
   constructor(private el: ElementRef) {}
 
   ngAfterViewInit() {
     const elements = {
       card: this.el.nativeElement.querySelector('div'),
-      image: this.el.nativeElement.querySelector('img'),
+      image: this.el.nativeElement.querySelector('.wheel-img'),
       title: this.el.nativeElement.querySelector('h3'),
       subtitle: this.el.nativeElement.querySelector('p'),
     };
 
-    const titleText = this.title.toLowerCase();
-    // Swap hover effects: minor -> red, major -> yellow
-    const glowColor = titleText.includes('minor')
-      ? '#FF0000' // red for MINOR
-      : titleText.includes('major')
-      ? '#FFD700' // yellow for MAJOR
-      : '#009DFF';
+    // Determine glow color: prefer explicit variant; fallback to legacy title parsing.
+    const parsedTitle = this.title.toLowerCase();
+    const effectiveVariant = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
+    const glowColor =
+      effectiveVariant === 'minor'
+        ? '#FF0000'
+        : effectiveVariant === 'major'
+        ? '#FFD700'
+        : effectiveVariant === 'grand'
+        ? '#009DFF'
+        : '#FFD700'; // default fallback
 
     const animations = {
       enter: {
@@ -44,16 +55,18 @@ export class PrizesCard implements AfterViewInit {
           borderColor: glowColor,
           boxShadow: `0 0 25px 6px ${glowColor}`,
         },
-        title: {
-          // On hover: no effects, just white text
-          scale: 1,
-          color: '#ffffff',
-          textShadow: 'none',
+        // Title/subtitle image hover (apply same glow to both small images)
+        titleImg: {
+          filter: `grayscale(0%) drop-shadow(0 0 12px ${glowColor})`,
+          scale: 1.05,
+          duration: 0.4,
+          ease: 'power2.out',
         },
-        subtitle: {
-          color: glowColor,
-          scale: 1.08,
-          textShadow: `0 0 20px ${glowColor}, 0 0 35px ${glowColor}`,
+        subtitleImg: {
+          filter: `grayscale(0%) drop-shadow(0 0 8px ${glowColor})`,
+          scale: 1.03,
+          duration: 0.4,
+          ease: 'power2.out',
         },
       },
       leave: {
@@ -68,15 +81,13 @@ export class PrizesCard implements AfterViewInit {
           borderColor: 'transparent',
           boxShadow: 'none',
         },
-        title: {
+        titleImg: {
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           scale: 1,
-          color: 'rgb(160,160,160)',
-          textShadow: 'none',
         },
-        subtitle: {
-          color: 'rgba(134,134,134,0.6)',
+        subtitleImg: {
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           scale: 1,
-          textShadow: 'none',
         },
       },
     };
@@ -87,18 +98,21 @@ export class PrizesCard implements AfterViewInit {
       gsap.to(el, { overwrite: 'auto', ...props });
     };
 
+    const titleImgEl = this.el.nativeElement.querySelector('.title-img');
+    const subtitleImgEl = this.el.nativeElement.querySelector('.subtitle-img');
+
     elements.card.addEventListener('mouseenter', () => {
       animate(elements.image, animations.enter.image);
       animate(elements.card, animations.enter.card);
-      animate(elements.title, animations.enter.title);
-      animate(elements.subtitle, animations.enter.subtitle);
+      if (titleImgEl) animate(titleImgEl, animations.enter.titleImg);
+      if (subtitleImgEl) animate(subtitleImgEl, animations.enter.subtitleImg);
     });
 
     elements.card.addEventListener('mouseleave', () => {
       animate(elements.image, animations.leave.image);
       animate(elements.card, animations.leave.card);
-      animate(elements.title, animations.leave.title);
-      animate(elements.subtitle, animations.leave.subtitle);
+      if (titleImgEl) animate(titleImgEl, animations.leave.titleImg);
+      if (subtitleImgEl) animate(subtitleImgEl, animations.leave.subtitleImg);
     });
   }
 }
