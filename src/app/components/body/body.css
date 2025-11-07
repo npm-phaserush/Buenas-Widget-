@@ -55,7 +55,7 @@
   }
 }
 
-/* Wheel slice shape (generic for dynamic slices) */
+/* Wheel slice shape  */
 .slice {
   position: absolute;
   width: 50%;
@@ -69,32 +69,7 @@
   overflow: hidden;
 }
 
-/* Slice positioning and transforms */
-.slice1 { 
-  transform: rotate(0deg) skewY(30deg); 
- background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%);
-
-}
-.slice2 { 
-  transform: rotate(60deg) skewY(30deg); 
-background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%);
-}
-.slice3 { 
-  transform: rotate(120deg) skewY(30deg); 
-background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%);
-}
-.slice4 { 
-  transform: rotate(180deg) skewY(30deg); 
-background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%);
-}
-.slice5 { 
-  transform: rotate(240deg) skewY(30deg); 
-  background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%);
-}
-.slice6 { 
-  transform: rotate(300deg) skewY(30deg); 
-  background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%);
-}
+/* Removed redundant slice1..slice6 definitions; base .slice covers appearance */
 
 .slice-content {
   transform: skewY(-20deg) rotate(-130deg);
@@ -113,8 +88,8 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
 
 /* Rim image effects */
 .rim-img {
-  filter: drop-shadow(0 0 15px rgba(255, 220, 50, 0.8))
-          drop-shadow(0 0 25px rgba(255, 160, 0, 0.6));
+  filter: drop-shadow(0 0 15px var(--rim-filter-a, rgba(255, 220, 50, 0.8)))
+          drop-shadow(0 0 25px var(--rim-filter-b, rgba(255, 160, 0, 0.6)));
 }
 
 /* Bulb glow animation */
@@ -123,13 +98,13 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
     opacity: 0.9; 
     transform: scale(0.95); 
     filter: brightness(1.2); 
-    box-shadow: 0 0 15px 5px rgba(255, 200, 0, 0.6);
+    box-shadow: 0 0 15px 5px var(--bulb-glow-0, rgba(255, 200, 0, 0.6));
   }
   100% { 
     opacity: 1; 
     transform: scale(1.2); 
     filter: brightness(1.6); 
-    box-shadow: 0 0 25px 8px rgba(255, 200, 0, 0.9);
+    box-shadow: 0 0 25px 8px var(--bulb-glow-1, rgba(255, 200, 0, 0.9));
   }
 }
 
@@ -150,8 +125,8 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
   transform: translate(-50%, -50%);
   border-radius: 50%;
   box-shadow:
-    0 0 40px 10px rgba(255, 215, 0, 0.6),
-    0 0 80px 20px rgba(255, 180, 0, 0.4);
+    0 0 40px 10px var(--rim-glow-0, rgba(255, 215, 0, 0.6)),
+    0 0 80px 20px var(--rim-glow-1, rgba(255, 180, 0, 0.4));
   z-index: 1;
   pointer-events: none;
   animation: rimGlow 2s ease-in-out infinite alternate;
@@ -160,13 +135,13 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
 @keyframes rimGlow {
   0% {
     box-shadow:
-      0 0 30px 10px rgba(255, 230, 0, 0.4),
-      0 0 60px 20px rgba(255, 160, 0, 0.3);
+      0 0 30px 10px var(--rim-glow-0, rgba(255, 230, 0, 0.4)),
+      0 0 60px 20px var(--rim-glow-1, rgba(255, 160, 0, 0.3));
   }
   100% {
     box-shadow:
-      0 0 60px 20px rgba(255, 230, 0, 0.9),
-      0 0 100px 40px rgba(255, 180, 0, 0.5);
+      0 0 60px 20px var(--rim-glow-0, rgba(255, 230, 0, 0.9)),
+      0 0 100px 40px var(--rim-glow-1, rgba(255, 180, 0, 0.5));
   }
 }
 
@@ -196,8 +171,8 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
   background: radial-gradient(circle, #fff 0%, #ffeb3b 30%, #ff9800 100%);
   border: 2px solid #ffd700;
   box-shadow: 
-    0 0 20px #ffd700,
-    0 0 40px #ffd700,
+    0 0 20px var(--bulb-base, #ffd700),
+    0 0 40px var(--bulb-base, #ffd700),
     inset 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
@@ -215,7 +190,7 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
   z-index: 0;
 }
 
-/* Floating labels (dynamic content overlay centered in each slice) */
+/* Floating labels */
 .floating-label {
   position: absolute;
   top: 50%;
@@ -241,9 +216,11 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
 
 /* === WINNER BANNER === */
 .winner-banner {
+      z-index: 100;
   position: absolute;
   top: 45%;
-  left: 75%;
+  left: 50%;
+  width: 200px;
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
@@ -267,4 +244,34 @@ background: radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 1
   object-fit: contain;
   border-radius: 10px;
   box-shadow: 0 0 10px #fff;
+}
+
+@media screen and (max-width: 433px) {
+  .winner-banner {
+    transform: translate(-50%, -50%) scale(0.8);
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+
+  .winner-img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .winner-banner {
+
+    width: 250px;
+    transform: translate(-50%, -50%) scale(0.8);
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+
+  .winner-img {
+    width: 50px;
+    height: 50px;
+  }
 }
