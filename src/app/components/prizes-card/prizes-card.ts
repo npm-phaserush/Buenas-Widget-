@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { gsap } from 'gsap';
 
 @Component({
@@ -8,7 +8,7 @@ import { gsap } from 'gsap';
   templateUrl: './prizes-card.html',
   styleUrl: './prizes-card.css',
 })
-export class PrizesCard implements AfterViewInit {
+export class PrizesCard implements AfterViewInit, OnChanges {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() image: string = '';
@@ -22,45 +22,70 @@ export class PrizesCard implements AfterViewInit {
 
   constructor(private el: ElementRef) {}
 
+  private elements!: { card: HTMLElement; image: HTMLElement | null; titleImg: HTMLElement | null; subtitleImg: HTMLElement | null };
+  private glowColor = '#FFD700';
+  private effectiveVariant: 'minor' | 'major' | 'grand' | '' = '';
+  private initialized = false;
+
   ngAfterViewInit() {
-    const elements = {
+    this.cacheElements();
+    this.resolveVariantAndGlow();
+    this.attachHoverHandlers();
+    this.applyInitialActiveState();
+    this.initialized = true;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.initialized) return;
+    if (changes['active']) {
+      // When active flag changes externally, apply or remove highlight accordingly.
+      if (this.active) {
+        this.resolveVariantAndGlow();
+        this.playEnterAnimation();
+      } else {
+        this.playLeaveAnimation();
+      }
+    }
+  }
+
+  private cacheElements() {
+    this.elements = {
       card: this.el.nativeElement.querySelector('div'),
       image: this.el.nativeElement.querySelector('.wheel-img'),
+      titleImg: this.el.nativeElement.querySelector('.title-img'),
+      subtitleImg: this.el.nativeElement.querySelector('.subtitle-img'),
     };
+  }
 
-    const parsedTitle = this.title.toLowerCase();
-    const effectiveVariant: 'minor' | 'major' | 'grand' | '' = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
+  private resolveVariantAndGlow() {
+    const parsedTitle = (this.title || '').toLowerCase();
+    this.effectiveVariant = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
+    this.glowColor = this.effectiveVariant === 'minor' ? '#FFD700' : this.effectiveVariant === 'major' ? '#FF2D2D' : this.effectiveVariant === 'grand' ? '#009DFF' : '#FFD700';
+  }
 
-    const glowColor =
-      effectiveVariant === 'minor'
-        ? '#FFD700' // yellow
-        : effectiveVariant === 'major'
-        ? '#FF2D2D' // red
-        : effectiveVariant === 'grand'
-        ? '#009DFF' // blue
-        : '#FFD700';
-
-    const animations = {
+  private get animations() {
+    return {
       enter: {
         image: {
           rotation: 360,
           scale: 1.15,
-          filter: `grayscale(0%) drop-shadow(0 0 40px ${glowColor})`,
+          filter: `grayscale(0%) drop-shadow(0 0 40px ${this.glowColor})`,
           duration: 0.8,
           ease: 'elastic.out(1, 0.5)',
         },
         card: {
-          borderColor: glowColor,
-          boxShadow: `0 0 25px 6px ${glowColor}`,
+          borderColor: this.glowColor,
+          boxShadow: `0 0 25px 6px ${this.glowColor}`,
+          duration: 0.4,
         },
         titleImg: {
-          filter: `grayscale(0%) drop-shadow(0 0 12px ${glowColor})`,
+          filter: `grayscale(0%) drop-shadow(0 0 12px ${this.glowColor})`,
           scale: 1.05,
           duration: 0.4,
           ease: 'power2.out',
         },
         subtitleImg: {
-          filter: `grayscale(0%) drop-shadow(0 0 8px ${glowColor})`,
+          filter: `grayscale(0%) drop-shadow(0 0 8px ${this.glowColor})`,
           scale: 1.03,
           duration: 0.4,
           ease: 'power2.out',
@@ -68,7 +93,7 @@ export class PrizesCard implements AfterViewInit {
       },
       leave: {
         image: {
-          rotation: -50, 
+          rotation: -50,
           scale: 1,
           filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           duration: 0.4,
@@ -77,50 +102,58 @@ export class PrizesCard implements AfterViewInit {
         card: {
           borderColor: 'transparent',
           boxShadow: 'none',
+          duration: 0.3,
         },
         titleImg: {
           filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           scale: 1,
+          duration: 0.3,
         },
         subtitleImg: {
           filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           scale: 1,
+          duration: 0.3,
         },
       },
     };
+  }
 
-    const animate = (el: HTMLElement, props: Record<string, any>) => {
-      gsap.killTweensOf(el); 
-      gsap.to(el, { overwrite: 'auto', ...props });
-    };
+  private animate(el: HTMLElement | null, props: Record<string, any>) {
+    if (!el) return;
+    gsap.killTweensOf(el);
+    gsap.to(el, { overwrite: 'auto', ...props });
+  }
 
-    const titleImgEl = this.el.nativeElement.querySelector('.title-img');
-    const subtitleImgEl = this.el.nativeElement.querySelector('.subtitle-img');
+  private playEnterAnimation() {
+    this.animate(this.elements.image, this.animations.enter.image);
+    this.animate(this.elements.card, this.animations.enter.card);
+    this.animate(this.elements.titleImg, this.animations.enter.titleImg);
+    this.animate(this.elements.subtitleImg, this.animations.enter.subtitleImg);
+  }
 
-    elements.card.addEventListener('mouseenter', () => {
-      animate(elements.image, animations.enter.image);
-      animate(elements.card, animations.enter.card);
-      if (titleImgEl) animate(titleImgEl, animations.enter.titleImg);
-      if (subtitleImgEl) animate(subtitleImgEl, animations.enter.subtitleImg);
-      if (effectiveVariant) this.picked.emit(effectiveVariant);
+  private playLeaveAnimation() {
+    this.animate(this.elements.image, this.animations.leave.image);
+    this.animate(this.elements.card, this.animations.leave.card);
+    this.animate(this.elements.titleImg, this.animations.leave.titleImg);
+    this.animate(this.elements.subtitleImg, this.animations.leave.subtitleImg);
+  }
+
+  private attachHoverHandlers() {
+    this.elements.card.addEventListener('mouseenter', () => {
+      // Only trigger pick if becoming active via hover and not already active
+      if (!this.active && this.effectiveVariant) this.picked.emit(this.effectiveVariant);
     });
-
-    elements.card.addEventListener('mouseleave', () => {
-      animate(elements.image, animations.leave.image);
-      animate(elements.card, animations.leave.card);
-      if (titleImgEl) animate(titleImgEl, animations.leave.titleImg);
-      if (subtitleImgEl) animate(subtitleImgEl, animations.leave.subtitleImg);
+    this.elements.card.addEventListener('mouseleave', () => {
+      // If not active, revert visuals
+      if (!this.active) this.playLeaveAnimation();
     });
+  }
 
-    // Default active on load
+  private applyInitialActiveState() {
     if (this.active) {
-      if (effectiveVariant) this.picked.emit(effectiveVariant);
-      setTimeout(() => {
-        animate(elements.image, animations.enter.image);
-        animate(elements.card, animations.enter.card);
-        if (titleImgEl) animate(titleImgEl, animations.enter.titleImg);
-        if (subtitleImgEl) animate(subtitleImgEl, animations.enter.subtitleImg);
-      }, 0);
+      this.playEnterAnimation();
+    } else {
+      this.playLeaveAnimation();
     }
   }
 }

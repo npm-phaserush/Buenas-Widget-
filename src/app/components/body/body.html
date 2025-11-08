@@ -4,19 +4,21 @@
     [titleImage]="'assets/images/minor.png'"
     [subtitleImage]="'assets/images/prizes.png'"
     [variant]="'minor'"
-    [active]="true"
+    [active]="currentVariant === 'minor'"
     (picked)="onVariantPicked($event)"
     image="assets/images/small_roulette1.png"></app-prizes-card>
   <app-prizes-card
     [titleImage]="'assets/images/major.png'"
     [subtitleImage]="'assets/images/prizes.png'"
     [variant]="'major'"
+    [active]="currentVariant === 'major'"
     (picked)="onVariantPicked($event)"
     image="assets/images/small_roulette2.png"></app-prizes-card>
   <app-prizes-card
     [titleImage]="'assets/images/grand.png'"
     [subtitleImage]="'assets/images/prizes.png'"
     [variant]="'grand'"
+    [active]="currentVariant === 'grand'"
     (picked)="onVariantPicked($event)"
     image="assets/images/small_roulette3.png"></app-prizes-card>
   <app-level [variant]="currentVariant"></app-level>
@@ -25,7 +27,7 @@
 <div
   class=" flex flex-row items-center justify-center w-full absolute  top-[150px]  sm:top-[160px] md:top-[180px]  lg:top-[280px] xl:top-[210px]  2xl:top-[160px] ">
 
-  <img src="assets/images/rim.png" alt=""
+  <img [src]="getRimImage()" alt=""
     class="w-[330px] h-[330px] sm:w-[550px] sm:h-[550px] md:h-[590px] md:w-[590px]   lg:w-[650px] lg:h-[650px] xl:w-[450px] xl:h-[450px] 2xl:h-[430px]  2xl:w-[430px] block rim-img"
     [style.--rim-filter-a]="getRimFilterA()"
     [style.--rim-filter-b]="getRimFilterB()">
@@ -43,7 +45,7 @@
         <div
           class="absolute w-1/2 h-1/2 top-1/2 left-1/2 origin-top-left slice"
           [style.transform]="getSliceTransform(i)"
-          [style.background]="getSliceBackground()">
+          [style.background]="getSliceBackground(i)">
         </div>
       }
 
@@ -166,9 +168,14 @@
   <div #winnerBanner class=" winner-banner ">
     @if (winnerImage) {
       <img [src]="winnerImage" alt="Prize"
-        class="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain rounded-lg shadow-white flex-shrink-100" />
+        class="winner-img object-contain" />
     }
     <span #winnerTextRef class="text-center whitespace-nowrap">{{ winnerText }}</span>
+    <button type="button"
+      class="mt-2 px-4 py-2 bg-linear-to-r from-red-600 to-yellow-600 border-none rounded-lg text-white font-semibold shadow-lg cursor-pointer"
+      (click)="onContinue()">
+      Continue
+    </button>
   </div>
 
 
