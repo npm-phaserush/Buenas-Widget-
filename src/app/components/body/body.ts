@@ -56,6 +56,19 @@ export class Body implements AfterViewInit {
     }
   }
 
+  // Variant-specific rim image mapping
+  getRimImage(): string {
+    switch (this.currentVariant) {
+      case 'major':
+        return 'assets/images/rim-red.png';
+      case 'grand':
+        return 'assets/images/rim-blue.png';
+      case 'minor':
+      default:
+        return 'assets/images/rim.png';
+    }
+  }
+
   getSliceBackground(): string {
     switch (this.currentVariant) {
       case 'major':
