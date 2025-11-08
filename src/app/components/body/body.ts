@@ -39,7 +39,7 @@ export class Body implements AfterViewInit {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    // Emit initial variant so parent listeners (e.g., Footer via Spinwheel) can sync
+    
     Promise.resolve().then(() => this.variantChange.emit(this.currentVariant));
   }
 
@@ -56,7 +56,7 @@ export class Body implements AfterViewInit {
     }
   }
 
-  // Variant-specific rim image mapping
+
   getRimImage(): string {
     switch (this.currentVariant) {
       case 'major':
@@ -69,24 +69,33 @@ export class Body implements AfterViewInit {
     }
   }
 
-  getSliceBackground(): string {
+  getSliceBackground(index?: number): string {
     switch (this.currentVariant) {
       case 'major':
+        if (typeof index === 'number' && index % 2 === 0) {
+          return 'radial-gradient(circle at center, #ff9999 0%, #e60000 50%, #993333 100%)';
+        }
         return 'radial-gradient(circle at center, #ff4d4d 0%, #cc0000 50%, #660000 100%)';
       case 'grand':
+        if (typeof index === 'number' && index % 2 === 0) {
+          return 'radial-gradient(circle at center, #b3e6ff 0%, #66a3ff 50%, #334d80 100%)';
+        }
         return 'radial-gradient(circle at center, #66ccff 0%, #0066cc 50%, #001f4d 100%)';
       case 'minor':
       default:
+        if (typeof index === 'number' && index % 2 === 0) {
+          return 'radial-gradient(circle at center, #ffd066 0%, #ffb84d 50%, #cc6600 100%)';
+        }
         return 'radial-gradient(circle at center, #ffae00 0%, #ff9900 50%, #a84b00 100%)';
     }
   }
 
-  // Use same gradient for bulbs so they track the active variant
+
   getBulbGradient(): string {
     return this.getSliceBackground();
   }
 
-  // Dynamic bulb glow CSS variable providers
+  
   getBulbBaseColor(): string {
     switch (this.currentVariant) {
       case 'major':
@@ -232,7 +241,7 @@ export class Body implements AfterViewInit {
   }
 
   launchConfetti() {
-    const end = Date.now() + 2500;
+    const end = Date.now() + 500;
     const frame = () => {
       confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
       confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
@@ -241,8 +250,18 @@ export class Body implements AfterViewInit {
     frame();
   }
 
+  
+  onContinue() {
+    try {
+      const banner: HTMLElement = this.winnerBanner?.nativeElement;
+      if (banner) {
+        gsap.to(banner, { opacity: 0, scale: 0.9, duration: 0.3, ease: 'power1.inOut' });
+      }
+    } catch {}
+  }
+
  showWinningAnimation(prize: string, imgSrc: string) {
-   this.winnerText = `YOU WON: ${prize}! `;
+   this.winnerText = `You won: ${prize}`;
    this.winnerImage = imgSrc;
    this.cdr.detectChanges();
     this.fitWinnerText();
@@ -254,7 +273,6 @@ export class Body implements AfterViewInit {
     gsap.set(banner, { opacity: 0, scale: 0.5, y: 50 });
     gsap.to(banner, { opacity: 1, scale: 1.2, y: 0, duration: 1, ease: 'back.out(1.7)' });
     gsap.to(banner, { scale: 1, duration: 0.4, delay: 1, ease: 'back.inOut(2)' });
-    gsap.to(banner, { opacity: 0, duration: 1, delay: 3, ease: 'power1.out' });
   }
 
   private fitWinnerText() {

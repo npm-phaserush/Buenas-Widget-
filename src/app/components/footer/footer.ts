@@ -13,8 +13,8 @@ export class Footer implements AfterViewInit {
 
   getJackpotAmount(): string {
     switch (this.variant) {
-      case 'major': return '₱198,765,432'; // higher than minor
-      case 'grand': return '₱298,765,432'; // highest
+      case 'major': return '₱198,765,432'; 
+      case 'grand': return '₱298,765,432'; 
       case 'minor':
       default: return '₱98,765,432';
     }
