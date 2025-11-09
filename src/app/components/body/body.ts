@@ -15,11 +15,11 @@ import { Level } from '../level/level';
 export class Body implements AfterViewInit {
   @ViewChild('wheel') wheel!: ElementRef;
   @ViewChild('winnerBanner') winnerBanner!: ElementRef;
-  @ViewChild('winnerText') winnerTextEl!: ElementRef<HTMLSpanElement>;
+  @ViewChild('winnerTextRef') winnerTextEl!: ElementRef<HTMLSpanElement>;
 
   winnerText = '';
   winnerImage = '';
-  spinCount = 1;
+  spinCount = 3;
   isSpinning = false;
   rotation = 0;
   currentVariant: 'minor' | 'major' | 'grand' = 'minor';
@@ -208,8 +208,12 @@ export class Body implements AfterViewInit {
     const sliceAngle = 360 / totalSlices;
     const randomIndex = Math.floor(Math.random() * totalSlices);
     const targetAngle = randomIndex * sliceAngle + sliceAngle / 2;
-    const finalRotation = 360 * 5 - targetAngle;
 
+    // cumulative rotation: keep spinning forward + align to the slice center under the top pointer
+    const currentMod = ((this.rotation % 360) + 360) % 360;
+    const desiredMod = (360 - targetAngle) % 360;
+    const modDelta = (desiredMod - currentMod + 360) % 360;
+    const finalRotation = this.rotation + 360 * 5 + modDelta;
     this.rotation = finalRotation;
 
        gsap.to(this.wheel.nativeElement, {
