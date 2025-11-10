@@ -10,5 +10,6 @@ import { Body } from "../components/body/body";
   styleUrl: './spinwheel.css',
 })
 export class Spinwheel {
+  activeVariant: 'minor' | 'major' | 'grand' = 'minor';
 
 }

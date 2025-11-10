@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { gsap } from 'gsap';
 
 @Component({
@@ -6,89 +6,154 @@ import { gsap } from 'gsap';
   standalone: true,
   imports: [],
   templateUrl: './prizes-card.html',
-  styleUrl: './prizes-card.css'
+  styleUrl: './prizes-card.css',
 })
-export class PrizesCard implements AfterViewInit {
+export class PrizesCard implements AfterViewInit, OnChanges {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() image: string = '';
+  @Input() titleImage: string = '';
+  @Input() subtitleImage: string = '';
+  @Input() titleAlt: string = '';
+  @Input() subtitleAlt: string = '';
+  @Input() variant: 'minor' | 'major' | 'grand' | '' = '';
+  @Input() active: boolean = false; 
+  @Output() picked = new EventEmitter<'minor' | 'major' | 'grand'>();
 
   constructor(private el: ElementRef) {}
 
+  private elements!: { card: HTMLElement; image: HTMLElement | null; titleImg: HTMLElement | null; subtitleImg: HTMLElement | null };
+  private glowColor = '#FFD700';
+  private effectiveVariant: 'minor' | 'major' | 'grand' | '' = '';
+  private initialized = false;
+
   ngAfterViewInit() {
-    const elements = {
+    this.cacheElements();
+    this.resolveVariantAndGlow();
+    this.attachHoverHandlers();
+    this.applyInitialActiveState();
+    this.initialized = true;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.initialized) return;
+    if (changes['active']) {
+      // When active flag changes externally, apply or remove highlight accordingly.
+      if (this.active) {
+        this.resolveVariantAndGlow();
+        this.playEnterAnimation();
+      } else {
+        this.playLeaveAnimation();
+      }
+    }
+  }
+
+  private cacheElements() {
+    this.elements = {
       card: this.el.nativeElement.querySelector('div'),
-      image: this.el.nativeElement.querySelector('img'),
-      title: this.el.nativeElement.querySelector('h3'),
-      subtitle: this.el.nativeElement.querySelector('p')
+      image: this.el.nativeElement.querySelector('.wheel-img'),
+      titleImg: this.el.nativeElement.querySelector('.title-img'),
+      subtitleImg: this.el.nativeElement.querySelector('.subtitle-img'),
     };
+  }
 
-    const titleText = this.title.toLowerCase();
-    const glowColor =
-      titleText.includes('minor') ? '#FFD700' :
-      titleText.includes('major') ? '#FF0000' :
-      '#009DFF';
+  private resolveVariantAndGlow() {
+    const parsedTitle = (this.title || '').toLowerCase();
+    this.effectiveVariant = this.variant || (parsedTitle.includes('minor') ? 'minor' : parsedTitle.includes('major') ? 'major' : parsedTitle.includes('grand') ? 'grand' : '');
+    this.glowColor = this.effectiveVariant === 'minor' ? '#FFD700' : this.effectiveVariant === 'major' ? '#FF2D2D' : this.effectiveVariant === 'grand' ? '#009DFF' : '#FFD700';
+  }
 
-    const animations = {
+  private get animations() {
+    return {
       enter: {
         image: {
           rotation: 360,
           scale: 1.15,
-          filter: `drop-shadow(0 0 40px ${glowColor})`,
+          filter: `grayscale(0%) drop-shadow(0 0 40px ${this.glowColor})`,
           duration: 0.8,
-          ease: 'elastic.out(1, 0.5)'
+          ease: 'elastic.out(1, 0.5)',
         },
         card: {
-          borderColor: glowColor,
-          boxShadow: `0 0 25px 6px ${glowColor}`
+          borderColor: this.glowColor,
+          boxShadow: `0 0 25px 6px ${this.glowColor}`,
+          duration: 0.4,
         },
-        title: {
-          scale: 1.1,
-          textShadow: `0 0 25px ${glowColor}, 0 0 40px ${glowColor}`
+        titleImg: {
+          filter: `grayscale(0%) drop-shadow(0 0 12px ${this.glowColor})`,
+          scale: 1.05,
+          duration: 0.4,
+          ease: 'power2.out',
         },
-        subtitle: {
-          color: glowColor,
-          scale: 1.08,
-          textShadow: `0 0 20px ${glowColor}, 0 0 35px ${glowColor}`
-        }
+        subtitleImg: {
+          filter: `grayscale(0%) drop-shadow(0 0 8px ${this.glowColor})`,
+          scale: 1.03,
+          duration: 0.4,
+          ease: 'power2.out',
+        },
       },
       leave: {
         image: {
           rotation: -50,
           scale: 1,
-          filter: 'drop-shadow(0 0 0 transparent)'
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
+          duration: 0.4,
+          ease: 'power2.inOut',
         },
         card: {
           borderColor: 'transparent',
-          boxShadow: 'none'
+          boxShadow: 'none',
+          duration: 0.3,
         },
-        title: {
+        titleImg: {
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           scale: 1,
-          textShadow: 'none'
+          duration: 0.3,
         },
-        subtitle: {
-          color: 'rgba(0,0,0,0.6)',
+        subtitleImg: {
+          filter: 'grayscale(100%) drop-shadow(0 0 0 transparent)',
           scale: 1,
-          textShadow: 'none'
-        }
-      }
+          duration: 0.3,
+        },
+      },
     };
+  }
 
-    const animate = (el: HTMLElement, props: Record<string, any>) =>
-      gsap.to(el, { duration: 0.25, ease: 'power2.out', ...props });
+  private animate(el: HTMLElement | null, props: Record<string, any>) {
+    if (!el) return;
+    gsap.killTweensOf(el);
+    gsap.to(el, { overwrite: 'auto', ...props });
+  }
 
-    elements.card.addEventListener('mouseenter', () => {
-      animate(elements.image, animations.enter.image);
-      animate(elements.card, animations.enter.card);
-      animate(elements.title, animations.enter.title);
-      animate(elements.subtitle, animations.enter.subtitle);
+  private playEnterAnimation() {
+    this.animate(this.elements.image, this.animations.enter.image);
+    this.animate(this.elements.card, this.animations.enter.card);
+    this.animate(this.elements.titleImg, this.animations.enter.titleImg);
+    this.animate(this.elements.subtitleImg, this.animations.enter.subtitleImg);
+  }
+
+  private playLeaveAnimation() {
+    this.animate(this.elements.image, this.animations.leave.image);
+    this.animate(this.elements.card, this.animations.leave.card);
+    this.animate(this.elements.titleImg, this.animations.leave.titleImg);
+    this.animate(this.elements.subtitleImg, this.animations.leave.subtitleImg);
+  }
+
+  private attachHoverHandlers() {
+    this.elements.card.addEventListener('mouseenter', () => {
+      // Only trigger pick if becoming active via hover and not already active
+      if (!this.active && this.effectiveVariant) this.picked.emit(this.effectiveVariant);
     });
-
-    elements.card.addEventListener('mouseleave', () => {
-      animate(elements.image, animations.leave.image);
-      animate(elements.card, animations.leave.card);
-      animate(elements.title, animations.leave.title);
-      animate(elements.subtitle, animations.leave.subtitle);
+    this.elements.card.addEventListener('mouseleave', () => {
+      // If not active, revert visuals
+      if (!this.active) this.playLeaveAnimation();
     });
+  }
+
+  private applyInitialActiveState() {
+    if (this.active) {
+      this.playEnterAnimation();
+    } else {
+      this.playLeaveAnimation();
+    }
   }
 }

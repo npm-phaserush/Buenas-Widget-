@@ -1,0 +1,4 @@
+/* Default state: grayscale images */
+.relative img { filter: grayscale(100%); }
+
+/* Remove previous variant-specific hover color logic; GSAP now only applies neutral white glow */
