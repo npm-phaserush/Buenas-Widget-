@@ -140,11 +140,11 @@ export class PrizesCard implements AfterViewInit, OnChanges {
 
   private attachHoverHandlers() {
     this.elements.card.addEventListener('mouseenter', () => {
-      // Only trigger pick if becoming active via hover and not already active
+     
       if (!this.active && this.effectiveVariant) this.picked.emit(this.effectiveVariant);
     });
     this.elements.card.addEventListener('mouseleave', () => {
-      // If not active, revert visuals
+
       if (!this.active) this.playLeaveAnimation();
     });
   }

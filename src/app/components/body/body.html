@@ -4,21 +4,21 @@
     [titleImage]="'assets/images/minor.png'"
     [subtitleImage]="'assets/images/prizes.png'"
     [variant]="'minor'"
-    [active]="currentVariant === 'minor'"
+    [active]="selectedVariant === 'minor'"
     (picked)="onVariantPicked($event)"
     image="assets/images/small_roulette1.png"></app-prizes-card>
   <app-prizes-card
     [titleImage]="'assets/images/major.png'"
     [subtitleImage]="'assets/images/prizes.png'"
     [variant]="'major'"
-    [active]="currentVariant === 'major'"
+    [active]="selectedVariant === 'major'"
     (picked)="onVariantPicked($event)"
     image="assets/images/small_roulette2.png"></app-prizes-card>
   <app-prizes-card
     [titleImage]="'assets/images/grand.png'"
     [subtitleImage]="'assets/images/prizes.png'"
     [variant]="'grand'"
-    [active]="currentVariant === 'grand'"
+    [active]="selectedVariant === 'grand'"
     (picked)="onVariantPicked($event)"
     image="assets/images/small_roulette3.png"></app-prizes-card>
   <app-level [variant]="currentVariant"></app-level>
@@ -27,7 +27,7 @@
 <div
   class=" flex flex-row items-center justify-center w-full absolute  top-[150px]  sm:top-[160px] md:top-[180px]  lg:top-[280px] xl:top-[210px]  2xl:top-[160px] ">
 
-  <img [src]="getRimImage()" alt=""
+  <img #rimImg [src]="getRimImage()" alt=""
     class="w-[330px] h-[330px] sm:w-[550px] sm:h-[550px] md:h-[590px] md:w-[590px]   lg:w-[650px] lg:h-[650px] xl:w-[450px] xl:h-[450px] 2xl:h-[430px]  2xl:w-[430px] block rim-img"
     [style.--rim-filter-a]="getRimFilterA()"
     [style.--rim-filter-b]="getRimFilterB()">
@@ -67,7 +67,7 @@
 
     </div>
     <!-- Rim Bulbs -->
-    <div
+    <div #rimBulbs
       class="absolute top-1/2 left-1/2 w-[330px] h-[340px] xs:w-[350px] xs:h-[350px] sm:w-[375px] sm:h-[385px] md:w-[590px] md:h-[630px] transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-30 rim-bulbs"
       [style.--bulb-base]="getBulbBaseColor()"
       [style.--bulb-glow-0]="getBulbGlow0()"
@@ -157,7 +157,7 @@
 
     <!-- Arrow Button -->
     <div class="absolute left-1/2 transform -translate-x-1/2 z-5 arrow">
-      <img src="assets/images/arrw-btn.png" alt="" class="h-15 xs:h-14 sm:h-16 md:h-18 lg:h-19">
+      <img #arrowBtn src="assets/images/arrw-btn.png" alt="" class="h-15 xs:h-14 sm:h-16 md:h-18 lg:h-19">
     </div>
   </div>
 

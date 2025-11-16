@@ -16,6 +16,9 @@ export class Body implements AfterViewInit {
   @ViewChild('wheel') wheel!: ElementRef;
   @ViewChild('winnerBanner') winnerBanner!: ElementRef;
   @ViewChild('winnerTextRef') winnerTextEl!: ElementRef<HTMLSpanElement>;
+  @ViewChild('rimImg') rimImg!: ElementRef<HTMLImageElement>;
+  @ViewChild('rimBulbs') rimBulbs!: ElementRef<HTMLElement>;
+  @ViewChild('arrowBtn') arrowBtn!: ElementRef<HTMLElement>;
 
   winnerText = '';
   winnerImage = '';
@@ -23,6 +26,7 @@ export class Body implements AfterViewInit {
   isSpinning = false;
   rotation = 0;
   currentVariant: 'minor' | 'major' | 'grand' = 'minor';
+  selectedVariant: 'minor' | 'major' | 'grand' = 'minor';
   @Output() variantChange = new EventEmitter<'minor' | 'major' | 'grand'>();
 
   slices = [
@@ -38,23 +42,54 @@ export class Body implements AfterViewInit {
 
   constructor(private cdr: ChangeDetectorRef) {}
 
-  ngAfterViewInit() {
-    
+  ngAfterViewInit(): void {
+    // Optionally notify initial variant to parent
     Promise.resolve().then(() => this.variantChange.emit(this.currentVariant));
-  }
-
-  getSliceTransform(index: number): string {
-    const sliceAngle = 360 / this.slices.length;
-    const angle = index * sliceAngle;
-    return `rotate(${angle}deg) skewY(${90 - sliceAngle}deg)`;
+    this.selectedVariant = this.currentVariant;
   }
 
   onVariantPicked(variant: 'minor' | 'major' | 'grand') {
-    if (variant) {
-      this.currentVariant = variant;
-      this.variantChange.emit(this.currentVariant);
+    if (!variant) return;
+   
+    this.selectedVariant = variant;
+    if (variant !== this.currentVariant) {
+      this.animateVariantChange(variant);
     }
   }
+
+  private animateVariantChange(next: 'minor' | 'major' | 'grand') {
+    const wheelEl = this.wheel?.nativeElement as HTMLElement;
+    const rimEl = this.rimImg?.nativeElement as HTMLElement;
+    const bulbsEl = this.rimBulbs?.nativeElement as HTMLElement;
+    const arrowEl = this.arrowBtn?.nativeElement as HTMLElement;
+    const slicesEl = wheelEl?.querySelectorAll('.slice') || [];
+
+    const tl = gsap.timeline();
+    tl.to(wheelEl, { rotation: '+=360', duration: 0.55, ease: 'power2.inOut' }, 0)
+      .to(rimEl, { opacity: 0, duration: 0.2, ease: 'power1.out' }, 0.05)
+      .to(slicesEl, { opacity: 0.6, duration: 0.2, ease: 'power1.out' }, '<')
+      .to(bulbsEl, { opacity: 0.6, duration: 0.2, ease: 'power1.out' }, '<')
+      .to(arrowEl, { opacity: 0.6, duration: 0.2, ease: 'power1.out' }, '<')
+      .call(() => {
+        this.currentVariant = next;
+        this.variantChange.emit(next);
+      })
+      .to(rimEl, { opacity: 1, duration: 0.25, ease: 'power1.in' }, '>-0.05')
+      .to(slicesEl, { opacity: 1, duration: 0.25, ease: 'power1.in' }, '<')
+      .to(bulbsEl, { opacity: 1, duration: 0.25, ease: 'power1.in' }, '<')
+      .to(arrowEl, { opacity: 1, duration: 0.1, ease: 'power1.in' }, '<')
+      .to(arrowEl, { scale: 1.2, y: -6, duration: 0.12, ease: 'back.out(2)' }, '>-0.05')
+      .to(arrowEl, { scale: 1, y: 0, duration: 0.2, ease: 'back.inOut(2)' }, '>')
+      .to(bulbsEl?.querySelectorAll('.bulb') || [], {
+        scale: 1.15,
+        duration: 0.12,
+        yoyo: true,
+        repeat: 1,
+        stagger: 0.02,
+        ease: 'power1.inOut',
+      }, '>-0.1');
+  }
+
 
 
   getRimImage(): string {
@@ -198,6 +233,12 @@ export class Body implements AfterViewInit {
     return `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotation}deg)`;
   }
 
+  getSliceTransform(index: number): string {
+    const sliceAngle = 360 / this.slices.length;
+    const angle = index * sliceAngle;
+    return `rotate(${angle}deg) skewY(${90 - sliceAngle}deg)`;
+  }
+
   spinWheel() {
     if (this.isSpinning || this.spinCount <= 0) return;
 
@@ -209,25 +250,22 @@ export class Body implements AfterViewInit {
     const randomIndex = Math.floor(Math.random() * totalSlices);
     const targetAngle = randomIndex * sliceAngle + sliceAngle / 2;
 
-    // cumulative rotation: keep spinning forward + align to the slice center under the top pointer
     const currentMod = ((this.rotation % 360) + 360) % 360;
     const desiredMod = (360 - targetAngle) % 360;
     const modDelta = (desiredMod - currentMod + 360) % 360;
     const finalRotation = this.rotation + 360 * 5 + modDelta;
     this.rotation = finalRotation;
 
-       gsap.to(this.wheel.nativeElement, {
+    gsap.to(this.wheel.nativeElement, {
       rotation: finalRotation,
       duration: 1,
       ease: 'power4.out',
-       onComplete: () => {
+      onComplete: () => {
         this.isSpinning = false;
-    // get the item stops at arrow pointer
-    const normalized = ((finalRotation % 360) + 360) % 360; 
-    const angleFromTop = (360 - normalized) % 360; 
-    const winnerIndex = Math.floor(angleFromTop / sliceAngle) % totalSlices;
+        const normalized = ((finalRotation % 360) + 360) % 360;
+        const angleFromTop = (360 - normalized) % 360;
+        const winnerIndex = Math.floor(angleFromTop / sliceAngle) % totalSlices;
 
-  
   const prize = this.slices[winnerIndex];
   const prizeText = (prize?.title || '').replace(/<br\s*\/?>/gi, ' ');
   const prizeImg = prize?.image || '';
@@ -238,9 +276,9 @@ export class Body implements AfterViewInit {
           duration: 0.3,
           ease: 'power1.inOut',
           yoyo: true,
-          repeat: 1
+          repeat: 1,
         });
-      }
+      },
     });
   }
 
@@ -265,7 +303,8 @@ export class Body implements AfterViewInit {
   }
 
  showWinningAnimation(prize: string, imgSrc: string) {
-   this.winnerText = `You won: ${prize}`;
+   const sanitizedPrize = (prize || '').replace(/<br\s*\/?>/gi, ' ');
+   this.winnerText = `You won: ${sanitizedPrize}`;
    this.winnerImage = imgSrc;
    this.cdr.detectChanges();
     this.fitWinnerText();
